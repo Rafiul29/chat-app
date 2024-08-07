@@ -4,6 +4,8 @@ import Inbox from "./pages/Inbox";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import useAuthCheck from "./hooks/useAuthCheck";
+import PrivetRoutes from "./routes/PrivetRoutes";
+import PublicRoutes from "./routes/PublicRoutes";
 
 function App() {
   const authChecked = useAuthCheck();
@@ -13,10 +15,38 @@ function App() {
   ) : (
     <Router>
       <Routes>
-        <Route path="/" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/inbox" element={<Conversation />} />
-        <Route path="/inbox/:id" element={<Inbox />} />
+        <Route
+          path="/"
+          element={
+            <PublicRoutes>
+              <Login />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/register"
+          element={
+            <PublicRoutes>
+              <Register />
+            </PublicRoutes>
+          }
+        />
+        <Route
+          path="/inbox"
+          element={
+            <PrivetRoutes>
+              <Conversation />
+            </PrivetRoutes>
+          }
+        />
+        <Route
+          path="/inbox/:id"
+          element={
+            <PrivetRoutes>
+              <Inbox />
+            </PrivetRoutes>
+          }
+        />
       </Routes>
     </Router>
   );
