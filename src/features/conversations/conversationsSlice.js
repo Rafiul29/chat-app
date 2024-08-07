@@ -14,4 +14,4 @@ const conversationsSlice=createSlice({
 
 
 export const {}=conversationsSlice.actions
-export default conversationsSlice.conversationssSlice
+export default conversationsSlice.reducer

@@ -5,7 +5,8 @@ const initialState={
 }
 
 const messagesSlice=createSlice({
-     initialState,
+    name:'conversations',
+    initialState,
     reducers:{
 
     }
@@ -13,4 +14,4 @@ const messagesSlice=createSlice({
 
 
 export const {}=messagesSlice.actions
-export default messagesSlice.conversationssSlice
+export default messagesSlice.reducer

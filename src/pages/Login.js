@@ -1,8 +1,37 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import logoImage from "../assets/images/lws-logo-light.svg";
 import Error from "../components/ui/Error";
+import { useEffect, useState } from "react";
+import { useLoginMutation } from "../features/auth/authApi";
 
 export default function Login() {
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const [login,{data,isLoading,error:responseError}]=useLoginMutation()
+
+  const handleLogin=(e)=>{
+    e.preventDefault()
+    login({
+      email,
+      password
+    })
+    
+  }
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(data, responseError);
+    if (responseError?.data) {
+      setError(responseError.data);
+    }
+    if (data?.accessToken && data?.user) {
+      navigate("/inbox");
+    }
+  }, [data, responseError, navigate]);
+  
   return (
     <div className="grid place-items-center h-screen bg-[#F9FAFB">
       <div className="min-h-full flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -19,7 +48,7 @@ export default function Login() {
               Sign in to your account
             </h2>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6" onSubmit={handleLogin}>
             <input type="hidden" name="remember" value="true" />
             <div className="rounded-md shadow-sm -space-y-px">
               <div>
@@ -34,6 +63,8 @@ export default function Login() {
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                   placeholder="Email address"
+                  value={email}
+                  onChange={(e)=>setEmail(e.target.value)}
                 />
               </div>
               <div>
@@ -48,6 +79,7 @@ export default function Login() {
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                   placeholder="Password"
+                  onChange={(e)=>setPassword(e.target.value)}
                 />
               </div>
             </div>
@@ -65,6 +97,7 @@ export default function Login() {
 
             <div>
               <button
+              disabled={isLoading}
                 type="submit"
                 className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-violet-600 hover:bg-violet-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-violet-500"
               >
@@ -72,7 +105,8 @@ export default function Login() {
               </button>
             </div>
 
-            <Error message="There was an error" />
+           { error!=='' &&  <Error message={error} />}
+
           </form>
         </div>
       </div>
