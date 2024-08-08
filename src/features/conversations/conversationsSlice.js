@@ -1,17 +1,12 @@
-import { createSlice } from "@reduxjs/toolkit"; 
+import { createSlice } from "@reduxjs/toolkit";
 
-const initialState={
+const initialState = {};
 
-}
+const conversationsSlice = createSlice({
+  name: "conversations",
+  initialState,
+  reducers: {},
+});
 
-const conversationsSlice=createSlice({
-    name:'conversations',
-    initialState,
-    reducers:{
-
-    }
-})
-
-
-export const {}=conversationsSlice.actions
-export default conversationsSlice.reducer
+export const {} = conversationsSlice.actions;
+export default conversationsSlice.reducer;
