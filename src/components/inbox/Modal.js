@@ -1,16 +1,22 @@
 import { useState } from "react";
 import isValidEmail from "../../utils/isValidEmail";
+import { useGetUserQuery } from "../../features/users/usersApi";
+import Error from "../ui/Error";
 
 export default function Modal({ open, control }) {
-
   const [to, setTo] = useState("");
   const [message, setMessage] = useState("");
+  const [userCheck, setUserChek] = useState(false);
+
+  const { data: participant, error } = useGetUserQuery(to, {
+    skip: !userCheck,
+  });
 
   const debounceHandler = (fn, delay) => {
     let timeoutId; // clouser hoawa lgbe
     // akta funtion return kora je function ta event ta pai
     return (...args) => {
-        // 500 mili sceond hober agge jodi type kore tokon abr setTimeout call tar agge  clear kore nibo timeoutId ta
+      // 500 mili sceond hober agge jodi type kore tokon abr setTimeout call tar agge  clear kore nibo timeoutId ta
 
       clearTimeout(timeoutId);
       timeoutId = setTimeout(() => {
@@ -20,13 +26,12 @@ export default function Modal({ open, control }) {
   };
 
   const doSearch = (value) => {
-    console.log(value)
-    if(isValidEmail(value)){
-        //check user API
-        setTo(value);
-        
+    console.log(value);
+    if (isValidEmail(value)) {
+      //check user API
+      setTo(value);
+      setUserChek(true);
     }
-
   };
 
   const handleSearch = debounceHandler(doSearch, 500);
@@ -56,7 +61,7 @@ export default function Modal({ open, control }) {
                   required
                   className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-violet-500 focus:border-violet-500 focus:z-10 sm:text-sm"
                   placeholder="Send to"
-                  onChange={(e)=>handleSearch(e.target.value)}
+                  onChange={(e) => handleSearch(e.target.value)}
                 />
               </div>
               <div>
@@ -85,7 +90,9 @@ export default function Modal({ open, control }) {
               </button>
             </div>
 
-            {/* <Error message="There was an error" /> */}
+            {participant?.length === 0 && (
+              <Error message="This user does not exist" />
+            )}
           </form>
         </div>
       </>
