@@ -38,6 +38,7 @@ export default function ChatItems() {
         conversation.users,
         email
       );
+      
       return (
         <li key={id}>
           <Link to={`/inbox/${id}`}>
