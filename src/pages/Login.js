@@ -23,7 +23,6 @@ export default function Login() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(data, responseError);
     if (responseError?.data) {
       setError(responseError.data);
     }

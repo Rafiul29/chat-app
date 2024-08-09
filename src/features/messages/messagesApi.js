@@ -16,4 +16,4 @@ export const messagesApi = apiSlice.injectEndpoints({
   }),
 });
 
-export const { useGetMessagesQuery,useAddMessageMutation } = messagesApi;
+export const { useGetMessagesQuery, useAddMessageMutation } = messagesApi;

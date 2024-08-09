@@ -8,6 +8,7 @@ import {
   useAddConversationMutation,
   useEditConversationMutation,
 } from "../../features/conversations/conversionsApi";
+// import { useAddMessageMutation } from "../../features/messages/messagesApi";
 
 export default function Modal({ open, control }) {
   const [to, setTo] = useState("");
@@ -25,10 +26,14 @@ export default function Modal({ open, control }) {
     skip: !userCheck,
   });
 
-  const [addConversation, { isSuccess: isAddConversationSuccess }] =
-    useAddConversationMutation();
+  const [
+    addConversation,
+    { data: addConversations, isSuccess: isAddConversationSuccess },
+  ] = useAddConversationMutation();
   const [editConversation, { isSuccess: isEditConversationSuccess }] =
     useEditConversationMutation();
+  //   const [addMessage,{data:messageData}]= useAddMessageMutation()
+  // console.log(messageData)
 
   useEffect(() => {
     if (participant?.length > 0 && participant[0].email !== myEmail) {
@@ -72,7 +77,6 @@ export default function Modal({ open, control }) {
   };
 
   const doSearch = (value) => {
-    console.log(value);
     if (isValidEmail(value)) {
       //check user API
       setTo(value);
@@ -88,6 +92,7 @@ export default function Modal({ open, control }) {
       //edit conversation
       editConversation({
         id: conversation[0].id,
+        sender: myEmail,
         data: {
           participants: `${myEmail}-${participant[0].email}`,
           users: [loggedInUser, participant[0]],
@@ -98,12 +103,23 @@ export default function Modal({ open, control }) {
     } else if (conversation?.length === 0) {
       //add conversation
       addConversation({
-        participants: `${myEmail}-${participant[0].email}`,
-        users: [loggedInUser, participant[0]],
-        message,
-        timestamp: new Date().getTime(),
+        sender: myEmail,
+        data: {
+          participants: `${myEmail}-${participant[0].email}`,
+          users: [loggedInUser, participant[0]],
+          message,
+          timestamp: new Date().getTime(),
+        },
       });
     }
+
+    // addMessage({
+    //   conversationId:1,
+    //   sender: loggedInUser,
+    //   receiver: participant[0],
+    //   message: message,
+    //   timestamp: new Date().getTime(),
+    // })
   };
   return (
     open && (
