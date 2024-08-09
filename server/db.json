@@ -37,12 +37,13 @@
         },
         {
           "email": "akash@learnwithsumit.com",
+          "password": "$2a$10$D0/2hk7n3DVhCBMavjOaoed0hi/1LhGgjwmhZBVvN.X.yxMV4bTCa",
           "name": "Akash Ahmed",
           "id": 2
         }
       ],
-      "message": "How are you?",
-      "timestamp": 1661976143678
+      "message": "js awesome",
+      "timestamp": 1723195411363
     },
     {
       "id": 2,
@@ -61,6 +62,25 @@
       ],
       "message": "How are you?",
       "timestamp": 1661976143678
+    },
+    {
+      "participants": "sumit@learnwithsumit.com-rafiulislamcse29@gmail.com",
+      "users": [
+        {
+          "email": "sumit@learnwithsumit.com",
+          "name": "Sumit Saha",
+          "id": 1
+        },
+        {
+          "email": "rafiulislamcse29@gmail.com",
+          "password": "$2a$10$D0/2hk7n3DVhCBMavjOaoed0hi/1LhGgjwmhZBVvN.X.yxMV4bTCa",
+          "name": "rafi",
+          "id": 4
+        }
+      ],
+      "message": "hello rafi",
+      "timestamp": 1723195465771,
+      "id": 3
     }
   ],
   "messages": [

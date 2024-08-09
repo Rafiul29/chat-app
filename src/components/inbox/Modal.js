@@ -3,7 +3,11 @@ import isValidEmail from "../../utils/isValidEmail";
 import { useGetUserQuery } from "../../features/users/usersApi";
 import Error from "../ui/Error";
 import { useDispatch, useSelector } from "react-redux";
-import { conversationsApi } from "../../features/conversations/conversionsApi";
+import {
+  conversationsApi,
+  useAddConversationMutation,
+  useEditConversationMutation,
+} from "../../features/conversations/conversionsApi";
 
 export default function Modal({ open, control }) {
   const [to, setTo] = useState("");
@@ -17,9 +21,14 @@ export default function Modal({ open, control }) {
 
   const dispatch = useDispatch();
 
-  const { data: participant} = useGetUserQuery(to, {
+  const { data: participant } = useGetUserQuery(to, {
     skip: !userCheck,
   });
+
+  const [addConversation, { isSuccess: isAddConversationSuccess }] =
+    useAddConversationMutation();
+  const [editConversation, { isSuccess: isEditConversationSuccess }] =
+    useEditConversationMutation();
 
   useEffect(() => {
     if (participant?.length > 0 && participant[0].email !== myEmail) {
@@ -41,6 +50,13 @@ export default function Modal({ open, control }) {
         });
     }
   }, [participant, dispatch, myEmail, to]);
+
+  // listen conversion add/edit success
+  useEffect(() => {
+    if (isAddConversationSuccess || isEditConversationSuccess) {
+      control();
+    }
+  }, [isAddConversationSuccess, isEditConversationSuccess]);
 
   const debounceHandler = (fn, delay) => {
     let timeoutId; // clouser hoawa lgbe
@@ -68,7 +84,26 @@ export default function Modal({ open, control }) {
 
   const handelSubmit = (e) => {
     e.preventDefault();
-    console.log("yes");
+    if (conversation?.length > 0) {
+      //edit conversation
+      editConversation({
+        id: conversation[0].id,
+        data: {
+          participants: `${myEmail}-${participant[0].email}`,
+          users: [loggedInUser, participant[0]],
+          message,
+          timestamp: new Date().getTime(),
+        },
+      });
+    } else if (conversation?.length === 0) {
+      //add conversation
+      addConversation({
+        participants: `${myEmail}-${participant[0].email}`,
+        users: [loggedInUser, participant[0]],
+        message,
+        timestamp: new Date().getTime(),
+      });
+    }
   };
   return (
     open && (
