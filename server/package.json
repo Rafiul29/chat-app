@@ -9,7 +9,9 @@
     "keywords": [],
     "author": "Learn with Sumit",
     "dependencies": {
+        "express": "^4.19.2",
         "json-server": "^0.17.0",
-        "nodemon": "^2.0.19"
+        "nodemon": "^2.0.19",
+        "socket.io": "^4.7.5"
     }
 }

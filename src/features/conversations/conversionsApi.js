@@ -92,13 +92,13 @@ export const conversationsApi = apiSlice.injectEndpoints({
             );
 
             const res = await dispatch(
-              messagesApi.endpoints.addMessage.initiate({
-                conversationId: conversation?.data?.id,
-                sender: senderUser,
-                receiver: receiverUser,
-                message: arg.data.message,
-                timestamp: arg.data.timestamp,
-              })
+                messagesApi.endpoints.addMessage.initiate({
+                    conversationId: conversation?.data?.id,
+                    sender: senderUser,
+                    receiver: receiverUser,
+                    message: arg.data.message,
+                    timestamp: arg.data.timestamp,
+                })
             ).unwrap();
             // update messages cache pessmistically
             dispatch(
