@@ -19,7 +19,7 @@ export const conversationsApi = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         // optimistic cache update start
-        const pathResult1=  dispatch(
+        const pathResult1 = dispatch(
           apiSlice.util.updateQueryData(
             "getConversations",
             arg.sender,
@@ -56,7 +56,7 @@ export const conversationsApi = apiSlice.injectEndpoints({
             );
           }
         } catch (err) {
-            pathResult1.undo()
+          pathResult1.undo();
         }
       },
     }),
@@ -68,7 +68,7 @@ export const conversationsApi = apiSlice.injectEndpoints({
       }),
       async onQueryStarted(arg, { queryFulfilled, dispatch }) {
         // optimistic cache update start
-        const pathResult1 = dispatch(
+        const pathResult = dispatch(
           apiSlice.util.updateQueryData(
             "getConversations",
             arg.sender,
@@ -91,7 +91,7 @@ export const conversationsApi = apiSlice.injectEndpoints({
               (user) => user.email !== arg.sender
             );
 
-            dispatch(
+            const res = await dispatch(
               messagesApi.endpoints.addMessage.initiate({
                 conversationId: conversation?.data?.id,
                 sender: senderUser,
@@ -99,10 +99,20 @@ export const conversationsApi = apiSlice.injectEndpoints({
                 message: arg.data.message,
                 timestamp: arg.data.timestamp,
               })
+            ).unwrap();
+            // update messages cache pessmistically
+            dispatch(
+              apiSlice.util.updateQueryData(
+                "getMessages",
+                res.conversationId.toString(),
+                (draft) => {
+                 draft.push(res)
+                }
+              )
             );
           }
         } catch (err) {
-          pathResult1.undo();
+          pathResult.undo();
         }
       },
     }),
